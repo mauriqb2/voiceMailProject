@@ -1,44 +1,24 @@
 import java.util.Scanner;
 
-/**
-   A telephone that takes simulated keystrokes and voice input
-   from the user and simulates spoken text.
-*/
 public class Telephone
 {
 	String response;
-   /**
-      Construct phone object.
-      @param aScanner that reads text from a character-input stream
-   */
+	private Scanner scanner;
 	
 	public String getResponse() {
 		return response;
 	}
 	
-   public Telephone(Scanner aScanner)
-   {
+   public Telephone(Scanner aScanner){
       scanner = aScanner;
    }
 
-   /**
-      Speak a message to System.out.
-      @param output the text that will be "spoken"
-   */
-   public void speak(String output)
-   {
+   public void speak(String output){
 	  response = output;
       System.out.println(output);
    }
 
-   /**
-      Loops reading user input and passes the input to the
-      Connection object's methods dial, record or hangup.
-      @param c the connection that connects this phone to the
-      voice mail system
-   */
-   public void run(Connection c)
-   {
+   public void run(Connection c){
       boolean more = true;
       while (more)
       {
@@ -55,6 +35,4 @@ public class Telephone
             c.record(input);
       }
    }
-
-   private Scanner scanner;
 }

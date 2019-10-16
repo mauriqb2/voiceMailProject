@@ -1,8 +1,3 @@
-/**
-   Connects a phone to the mail system. The purpose of this
-   class is to keep track of the state of a connection, since
-   the phone itself is just a source of individual key presses.
-*/
 public class Connection
 {
 	   private Mailbox currentMailbox;
@@ -32,24 +27,13 @@ public class Connection
 	         + "Enter 3 to delete the current message\n"
 	         + "Enter 4 to return to the main menu";
 	   
-   /**
-      Construct a Connection object.
-      @param s a MailSystem object
-      @param p a Telephone object
-   */
-   public Connection(MailSystem s, Telephone p)
-   {
+   public Connection(MailSystem s, Telephone p){
       system = s;
       phone = p;
       resetConnection(); 
    }
 
-   /**
-      Respond to the user's pressing a key on the phone touchpad
-      @param key the phone key pressed by the user
-   */
-   public void dial(String key)
-   {
+   public void dial(String key){
       if (state == CONNECTED)
          connect(key);
       else if (state == RECORDING)
@@ -64,44 +48,25 @@ public class Connection
          messageMenu(key);
    }
 
-   /**
-      Record voice.
-      @param voice voice spoken by the user
-   */
-   public void record(String voice)
-   {
+   public void record(String voice){
       if (state == RECORDING || state == CHANGE_GREETING)
          currentRecording += voice;
    }
 
-   /**
-      The user hangs up the phone.
-   */
-   public void hangup()
-   {
+   public void hangup(){
       if (state == RECORDING)
          currentMailbox.addMessage(new Message(currentRecording));
       resetConnection();
    }
 
-   /**
-      Reset the connection to the initial state and prompt
-      for mailbox number
-   */
-   private void resetConnection()
-   {
+   private void resetConnection(){
       currentRecording = "";
       accumulatedKeys = "";
       state = CONNECTED;
       phone.speak(INITIAL_PROMPT);
    }
 
-   /**
-      Try to connect the user with the specified mailbox.
-      @param key the phone key pressed by the user
-   */
-   private void connect(String key)
-   {
+   private void connect(String key){
       if (key.equals("#"))
       {
          currentMailbox = system.findMailbox(accumulatedKeys);
@@ -118,12 +83,7 @@ public class Connection
          accumulatedKeys += key;
    }
 
-   /**
-      Try to log in the user.
-      @param key the phone key pressed by the user
-   */
-   private void login(String key)
-   {
+   private void login(String key){
       if (key.equals("#"))
       {
          if (currentMailbox.checkPasscode(accumulatedKeys))
@@ -139,12 +99,7 @@ public class Connection
          accumulatedKeys += key; 
    }
 
-   /**
-      Change passcode.
-      @param key the phone key pressed by the user
-   */
-   private void changePasscode(String key)
-   {
+   private void changePasscode(String key){
       if (key.equals("#"))
       {
          currentMailbox.setPasscode(accumulatedKeys);
@@ -156,27 +111,15 @@ public class Connection
          accumulatedKeys += key;
    }
 
-   /**
-      Change greeting.
-      @param key the phone key pressed by the user
-   */
-   private void changeGreeting(String key)
-   {
+   private void changeGreeting(String key){
       if (key.equals("#"))
-      {
          currentMailbox.setGreeting(currentRecording);
          currentRecording = "";
          state = MAILBOX_MENU;
          phone.speak(MAILBOX_MENU_TEXT);
-      }
    }
 
-   /**
-      Respond to the user's selection from mailbox menu.
-      @param key the phone key pressed by the user
-   */
-   private void mailboxMenu(String key)
-   {
+   private void mailboxMenu(String key){
 	  switch(Integer.parseInt(key)) {
 		  case 1:{
 			  state = MESSAGE_MENU;
@@ -196,12 +139,7 @@ public class Connection
 	  }
    }
 
-   /**
-      Respond to the user's selection from message menu.
-      @param key the phone key pressed by the user
-   */
-   private void messageMenu(String key)
-   {
+   private void messageMenu(String key){
 	  switch(Integer.parseInt(key)) {
 	  	case  1:{
 	  		String output = getMessage();

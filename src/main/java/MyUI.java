@@ -13,35 +13,27 @@ import com.vaadin.ui.TextArea;
 import com.vaadin.ui.TextField;
 import com.vaadin.ui.UI;
 import com.vaadin.ui.VerticalLayout;
- 
-/**
- * This UI is the application entry point. A UI may either represent a browser window
- * (or tab) or some part of a html page where a Vaadin application is embedded.
- * <p>
- * The UI is initialized using {@link #init(VaadinRequest)}. This method is intended to be
- * overridden to add component to the user interface and initialize non-component functionality.
- */
+
 @Theme("valo")
 public class MyUI extends UI {
 	MailSystem system = new MailSystem(20);
     String input = "";
     Scanner console = new Scanner(input);
-    Telephone p = new Telephone(console);
-    Connection c = new Connection(system, p);
+    Telephone phone = new Telephone(console);
+    Connection connection = new Connection(system, phone);
  
     @Override
     protected void init(VaadinRequest vaadinRequest) {
         
     	final HorizontalLayout base = new HorizontalLayout();
-    	
         final VerticalLayout layout = new VerticalLayout();
-         
         final TextField name = new TextField();
-        name.setReadOnly(true);
         
         TextArea menu = new TextArea(); 
+        
+        name.setReadOnly(true);
         menu.setReadOnly(true);
-        menu.setValue(p.getResponse());
+        menu.setValue(phone.getResponse());
  
         Button button_number_1= new Button("1");
         button_number_1.addClickListener( e -> {
@@ -85,30 +77,23 @@ public class MyUI extends UI {
         });
         
         final HorizontalLayout first_row = new HorizontalLayout();
+        final HorizontalLayout second_row = new HorizontalLayout();
+        final HorizontalLayout third_row = new HorizontalLayout();
+        final HorizontalLayout fourt_row = new HorizontalLayout();
+        final HorizontalLayout display = new HorizontalLayout();
         
         first_row.addComponents(button_number_1,button_number_2,button_number_3);
-        
-        final HorizontalLayout second_row = new HorizontalLayout();
-        
         second_row.addComponents(button_number_4,button_number_5,button_number_6);
-
-        final HorizontalLayout third_row = new HorizontalLayout();
-        
         third_row.addComponents(button_number_7,button_number_8,button_number_9);
-        
-        final HorizontalLayout fourt_row = new HorizontalLayout();
-        
         fourt_row.addComponents(button_number_0);
         
         Button call = new Button("CALL");
-        call.addClickListener( e -> pressCall(name, menu));
-        Button enter = new Button("enter");
-        enter.addClickListener( e -> pressEnter(name, menu));
         Button hangup = new Button("HANGUP");
-        hangup.addClickListener( e -> pressHangup(name, menu));
-         
-        final HorizontalLayout display = new HorizontalLayout();
+        Button enter = new Button("enter");
         
+        call.addClickListener( e -> pressCall(name, menu));
+        enter.addClickListener( e -> pressEnter(name, menu));
+        hangup.addClickListener( e -> pressHangup(name, menu));
         display.addComponents(name,call,hangup,enter);
         
         layout.addComponents(display, first_row,second_row, third_row, fourt_row);
@@ -116,28 +101,25 @@ public class MyUI extends UI {
         layout.setSpacing(true);
         
         base.addComponents(layout, menu);
-         
-        setContent(base);
-        
-        
+        setContent(base);  
     }
     
     public void pressCall(TextField data, TextArea display) {
-    	c.dial(data.getValue());
-    	c.dial("#");
+    	connection.dial(data.getValue());
+    	connection.dial("#");
     	data.setValue("");
-    	display.setValue(p.getResponse());
+    	display.setValue(phone.getResponse());
     }
 
     public void pressEnter(TextField data, TextArea display) {
-    	c.dial(data.getValue());
+    	connection.dial(data.getValue());
     	data.setValue("");
-    	display.setValue(p.getResponse());
+    	display.setValue(phone.getResponse());
     }
     
     public void pressHangup(TextField data, TextArea display) {
-    	c.hangup();
-    	display.setValue(p.getResponse());
+    	connection.hangup();
+    	display.setValue(phone.getResponse());
     }
  
     @WebServlet(urlPatterns = "/*", name = "MyUIServlet", asyncSupported = true)
