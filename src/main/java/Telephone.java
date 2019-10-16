@@ -6,10 +6,16 @@ import java.util.Scanner;
 */
 public class Telephone
 {
+	String response;
    /**
       Construct phone object.
       @param aScanner that reads text from a character-input stream
    */
+	
+	public String getResponse() {
+		return response;
+	}
+	
    public Telephone(Scanner aScanner)
    {
       scanner = aScanner;
@@ -21,6 +27,7 @@ public class Telephone
    */
    public void speak(String output)
    {
+	  response = output;
       System.out.println(output);
    }
 
