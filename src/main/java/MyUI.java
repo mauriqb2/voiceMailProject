@@ -100,18 +100,16 @@ public class MyUI extends UI {
         
         fourt_row.addComponents(button_number_0);
         
-        Button hash = new Button("#");
-        hash.addClickListener( e -> hashtag(name, menu));
+        Button call = new Button("CALL");
+        call.addClickListener( e -> pressCall(name, menu));
         Button enter = new Button("enter");
         enter.addClickListener( e -> pressEnter(name, menu));
         Button hangup = new Button("HANGUP");
         hangup.addClickListener( e -> pressHangup(name, menu));
-        Button call = new Button("CALL");
-        call.addClickListener( e -> pressCall(name, menu));
          
         final HorizontalLayout display = new HorizontalLayout();
         
-        display.addComponents(name,hash,enter,hangup,call);
+        display.addComponents(name,call,hangup,enter);
         
         layout.addComponents(display, first_row,second_row, third_row, fourt_row);
         layout.setMargin(true);
@@ -124,7 +122,7 @@ public class MyUI extends UI {
         
     }
     
-    public void hashtag(TextField data, TextArea display) {
+    public void pressCall(TextField data, TextArea display) {
     	c.dial(data.getValue());
     	c.dial("#");
     	data.setValue("");
@@ -139,11 +137,6 @@ public class MyUI extends UI {
     
     public void pressHangup(TextField data, TextArea display) {
     	c.hangup();
-    	display.setValue(p.getResponse());
-    }
-    
-    public void pressCall(TextField data, TextArea display) {
-    	c.dial("");
     	display.setValue(p.getResponse());
     }
  
