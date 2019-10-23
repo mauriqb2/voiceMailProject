@@ -4,11 +4,13 @@ public class MailSystemTester
 {
 	private static final int MAILBOX_COUNT = 20;
 	
-   public static void main(String[] args){
+   public static void init(){
       MailSystem system = new MailSystem(MAILBOX_COUNT);
       Scanner console = new Scanner(System.in);
       Telephone p = new Telephone(console);
-      Connection c = new Connection(system, p);
+      ConnectionObservable observable = new ConnectionObservable();
+      observable.addObserver(p);
+      Connection c = new Connection(system, observable);
       p.run(c);
    }
 }

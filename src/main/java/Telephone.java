@@ -1,6 +1,6 @@
 import java.util.Scanner;
 
-public class Telephone
+public class Telephone implements ConnectionObserver
 {
 	String response;
 	private Scanner scanner;

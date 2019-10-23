@@ -15,7 +15,7 @@ import com.vaadin.ui.UI;
 import com.vaadin.ui.VerticalLayout;
 
 @Theme("valo")
-public class MyUI extends UI {
+public class MyUI extends UI implements ConnectionObserver {
 	MailSystem system = new MailSystem(20);
     String input = "";
     Scanner console = new Scanner(input);
