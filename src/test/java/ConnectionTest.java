@@ -10,16 +10,16 @@ public class ConnectionTest {
 	Mailbox mailbox;
 	Connection connection;
 	Message message;
-	ConnectionObservable observable;
+	Observable observable;
 
 	@BeforeEach
 	public void setup() {
 		system = mock(MailSystem.class);
 	    phone = mock(Telephone.class);
 	    mailbox = mock(Mailbox.class);
-	    observable = new ConnectionObservable();
+	    observable = new Observable();
 	    observable.addObserver(phone);
-	    connection = new Connection(system, observable);
+	    connection = new Connection(system);
 	    message = mock(Message.class);
 	}
 	

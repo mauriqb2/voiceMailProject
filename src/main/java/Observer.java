@@ -1,4 +1,4 @@
 
-public interface ConnectionObserver {
+public interface Observer {
 	public void speak(String message);
 }

@@ -15,12 +15,17 @@ import com.vaadin.ui.UI;
 import com.vaadin.ui.VerticalLayout;
 
 @Theme("valo")
-public class MyUI extends UI implements ConnectionObserver {
+public class MyUI extends UI implements Observer{
+	TextArea menu = new TextArea();
 	MailSystem system = new MailSystem(20);
     String input = "";
     Scanner console = new Scanner(input);
-    Telephone phone = new Telephone(console);
-    Connection connection = new Connection(system, phone);
+    Connection connection;
+    
+    public MyUI(Connection connection){
+    	this.connection = connection;
+    	connection.addObserver(this);
+    }
  
     @Override
     protected void init(VaadinRequest vaadinRequest) {
@@ -29,11 +34,8 @@ public class MyUI extends UI implements ConnectionObserver {
         final VerticalLayout layout = new VerticalLayout();
         final TextField name = new TextField();
         
-        TextArea menu = new TextArea(); 
-        
         name.setReadOnly(true);
         menu.setReadOnly(true);
-        menu.setValue(phone.getResponse());
  
         Button button_number_1= new Button("1");
         button_number_1.addClickListener( e -> {
@@ -103,24 +105,26 @@ public class MyUI extends UI implements ConnectionObserver {
         base.addComponents(layout, menu);
         setContent(base);  
     }
-    
+
     public void pressCall(TextField data, TextArea display) {
     	connection.dial(data.getValue());
     	connection.dial("#");
     	data.setValue("");
-    	display.setValue(phone.getResponse());
     }
 
     public void pressEnter(TextField data, TextArea display) {
     	connection.dial(data.getValue());
     	data.setValue("");
-    	display.setValue(phone.getResponse());
     }
     
     public void pressHangup(TextField data, TextArea display) {
     	connection.hangup();
-    	display.setValue(phone.getResponse());
     }
+    
+    @Override
+	public void speak(String message) {
+		menu.setValue(message);
+	}
  
     @WebServlet(urlPatterns = "/*", name = "MyUIServlet", asyncSupported = true)
     @VaadinServletConfiguration(ui = MyUI.class, productionMode = false)

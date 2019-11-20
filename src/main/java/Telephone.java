@@ -1,18 +1,22 @@
 import java.util.Scanner;
 
-public class Telephone implements ConnectionObserver
+public class Telephone implements Observer
 {
 	String response;
 	private Scanner scanner;
+	Connection connection;
 	
 	public String getResponse() {
 		return response;
 	}
 	
-   public Telephone(Scanner aScanner){
-      scanner = aScanner;
+   public Telephone(Connection connection,Scanner scanner){
+      this.connection = connection;
+      this.scanner = scanner;
+      this.connection.addObserver(this);
    }
 
+   @Override
    public void speak(String output){
 	  response = output;
       System.out.println(output);

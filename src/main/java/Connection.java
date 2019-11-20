@@ -1,10 +1,9 @@
-public class Connection
+public class Connection extends Observable
 {
 	   private Mailbox currentMailbox;
 	   private MailSystem system;
 	   private String currentRecording;
 	   private String accumulatedKeys;
-	   private ConnectionObservable observable;
 	   private int state;
 
 	   private static final int DISCONNECTED = 0;
@@ -27,9 +26,8 @@ public class Connection
 	         + "Enter 3 to delete the current message\n"
 	         + "Enter 4 to return to the main menu";
 	   
-   public Connection(MailSystem s, ConnectionObservable observable){
+   public Connection(MailSystem s){
       system = s;
-      this.observable = observable;
       resetConnection(); 
    }
 
@@ -63,7 +61,7 @@ public class Connection
       currentRecording = "";
       accumulatedKeys = "";
       state = CONNECTED;
-      observable.speakAll(INITIAL_PROMPT);
+      speakAll(INITIAL_PROMPT);
    }
 
    private void connect(String key){
@@ -73,10 +71,10 @@ public class Connection
          if (currentMailbox != null)
          {
             state = RECORDING;
-            observable.speakAll(currentMailbox.getGreeting());
+            speakAll(currentMailbox.getGreeting());
          }
          else
-        	 observable.speakAll("Incorrect mailbox number. Try again!");
+        	 speakAll("Incorrect mailbox number. Try again!");
          accumulatedKeys = "";
       }
       else
@@ -89,10 +87,10 @@ public class Connection
          if (currentMailbox.checkPasscode(accumulatedKeys))
          {
             state = MAILBOX_MENU;
-            observable.speakAll(MAILBOX_MENU_TEXT);
+            speakAll(MAILBOX_MENU_TEXT);
          }
          else
-        	 observable.speakAll("Incorrect passcode. Try again!");
+        	 speakAll("Incorrect passcode. Try again!");
          accumulatedKeys = "";
       }
       else
@@ -104,7 +102,7 @@ public class Connection
       {
          currentMailbox.setPasscode(accumulatedKeys);
          state = MAILBOX_MENU;
-         observable.speakAll(MAILBOX_MENU_TEXT);
+         speakAll(MAILBOX_MENU_TEXT);
          accumulatedKeys = "";
       }
       else
@@ -116,24 +114,24 @@ public class Connection
          currentMailbox.setGreeting(currentRecording);
          currentRecording = "";
          state = MAILBOX_MENU;
-         observable.speakAll(MAILBOX_MENU_TEXT);
+         speakAll(MAILBOX_MENU_TEXT);
    }
 
    private void mailboxMenu(String key){
 	  switch(Integer.parseInt(key)) {
 		  case 1:{
 			  state = MESSAGE_MENU;
-			  observable.speakAll(MESSAGE_MENU_TEXT);
+			  speakAll(MESSAGE_MENU_TEXT);
 		      break;
 		  } 
 		  case 2:{
 			  state = CHANGE_PASSCODE;
-			  observable.speakAll("Enter new passcode followed by the # key");
+			  speakAll("Enter new passcode followed by the # key");
 		      break;
 		  }
 		  case 3:{
 			  state = CHANGE_GREETING;
-			  observable.speakAll("Record your greeting, then press the # key");
+			  speakAll("Record your greeting, then press the # key");
 		      break;
 		  }
 	  }
@@ -143,22 +141,22 @@ public class Connection
 	  switch(Integer.parseInt(key)) {
 	  	case  1:{
 	  		String output = getMessage();
-	  		observable.speakAll(output);
+	  		speakAll(output);
 	        break;
 	  	}
 	  	case 2:{
 	  		currentMailbox.saveCurrentMessage();
-	  		observable.speakAll(MESSAGE_MENU_TEXT);
+	  		speakAll(MESSAGE_MENU_TEXT);
 	        break;
 	  	}
 	  	case 3:{
 	  		currentMailbox.removeCurrentMessage();
-	  		observable.speakAll(MESSAGE_MENU_TEXT);
+	  		speakAll(MESSAGE_MENU_TEXT);
 	        break;
 	  	}
 	  	case 4:{
 	  		state = MAILBOX_MENU;
-	  		observable.speakAll(MAILBOX_MENU_TEXT);
+	  		speakAll(MAILBOX_MENU_TEXT);
 	        break;
 	  	}
 	  }
