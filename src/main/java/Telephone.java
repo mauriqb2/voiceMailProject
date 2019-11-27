@@ -14,6 +14,7 @@ public class Telephone implements Observer
       this.connection = connection;
       this.scanner = scanner;
       this.connection.addObserver(this);
+      connection.hangup();
    }
 
    @Override

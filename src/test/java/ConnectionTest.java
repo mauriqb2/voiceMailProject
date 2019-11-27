@@ -1,6 +1,8 @@
 import static org.junit.jupiter.api.Assertions.assertEquals;
 import static org.mockito.Mockito.*;
 
+import java.util.Scanner;
+
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
 
@@ -10,16 +12,15 @@ public class ConnectionTest {
 	Mailbox mailbox;
 	Connection connection;
 	Message message;
-	Observable observable;
 
 	@BeforeEach
 	public void setup() {
 		system = mock(MailSystem.class);
 	    phone = mock(Telephone.class);
 	    mailbox = mock(Mailbox.class);
-	    observable = new Observable();
-	    observable.addObserver(phone);
 	    connection = new Connection(system);
+	    connection.addObserver(phone);
+	    connection.setCurrentMailbox(mailbox);
 	    message = mock(Message.class);
 	}
 	
@@ -94,7 +95,7 @@ public class ConnectionTest {
 		connection.dial("1");
 		connection.dial("#");
 		connection.dial("2"); 
-		verify(phone).speak("Enter mailbox number followed by #");
+		verify(phone).speak("Enter new passcode followed by the # key");
 	}
 	
 	@Test
@@ -108,9 +109,7 @@ public class ConnectionTest {
 		connection.dial("1");
 		connection.dial("#");
 		connection.dial("2"); 
-		connection.dial("1");
-		connection.dial("2");
-		connection.dial("3");
+		connection.dial("123");
 		connection.dial("#");
 		verify(mailbox).setPasscode("123");
 		verify(phone, times(2)).speak("Enter 1 to listen to your messages\n" 
@@ -129,9 +128,7 @@ public class ConnectionTest {
 		connection.dial("1");
 		connection.dial("#");
 		connection.dial("2"); 
-		connection.dial("1");
-		connection.dial("2");
-		connection.dial("3");
+		connection.dial("123");
 		connection.dial("#");
 		assertEquals("123", mailboxtest.getPasscode());
 		verify(phone, times(2)).speak("Enter 1 to listen to your messages\n" 
@@ -150,7 +147,7 @@ public class ConnectionTest {
 		connection.dial("1");
 		connection.dial("#");
 		connection.dial("3"); 
-		connection.dial("Hola test");
+		connection.dial(newGreeting);
 		connection.dial("#");
 		verify(phone, times(2)).speak("Enter 1 to listen to your messages\n" 
 							+ "Enter 2 to change your passcode\n"

@@ -7,9 +7,9 @@ public class MailSystemTester
    public static void main(String[] args){
       MailSystem system = new MailSystem(MAILBOX_COUNT);
       Scanner console = new Scanner(System.in);
-      Connection c = new Connection(system);
-      Telephone p = new Telephone(c, console);
-      MyUI ui = new MyUI(c);
-      p.run(c);
+      Connection connection = new Connection(system);
+      Telephone phone = new Telephone(connection, console);
+      MyUI ui = new MyUI(connection);
+      phone.run(connection);
    }
 }
